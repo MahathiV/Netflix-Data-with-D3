@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Netflix Viewers Visualizations</title>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  
+  <form>
+   
+    <h2>Select a value to display Top 10 viewers in each category</h2>
+
+    <select id="top10">
+      <option value="Genre" selected = "selected">Genre</option>
+      <option value="Language">Language</option>
+      <option value="director">Director</option>
+      <option value="country">Country</option>
+      <option value="cast">Actor</option>
+    </select>
+    
+    <div id="svg-area"></div>
+
+    <br>
+
+    <h2>Streaming Service Analysis</h2>
+
+    <div id="svg-area1"></div>
+    <div id="svg-area2"></div>
+
+    <!--<svg width="600" 
+             height="600" 
+             id="brush"></svg> -->
+
+        <!--table for data of brushed elements-->
+        <div id="table">
+          <table>
+              <tr>
+                  <th>IMDB</th>
+              </tr>
+          </table>
+      </div>
+    
+
+  </form>
+  
+  <script type="text/javascript" src="app.js"></script>
+  <!--<script type="text/javascript" src="scatterapp.js"></script> -->
+
+</body>
+
+</html>

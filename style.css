@@ -1,0 +1,50 @@
+rect {            /* For Bar Chart */
+    fill: firebrick;
+}
+
+rect:hover /* For Bar Chart */
+{
+    fill:black;
+    stroke: firebrick;
+    stroke-width: 0.35ch;
+	cursor:pointer;
+}
+
+text{
+    font-size: 1.3em;
+}
+
+/* For Scatter plot Brushing */
+
+table
+{
+    visibility: hidden;
+    position:absolute;
+    top: 30px;
+    left: 500 px;
+    font-family: sans-serif;
+    font-size: 0.7em;
+}
+
+tr:nth-child(even)
+{
+    background-color:aquamarine;
+}
+
+/*
+.brushed
+{
+    fill: gainsboro;
+    stroke: red;
+    opacity: 1.0;
+} */
+
+/*.non_brushed
+{
+    fill: brown;
+    opacity: 0.5;
+} */
+
+
+
+
