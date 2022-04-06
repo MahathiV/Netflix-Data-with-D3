@@ -1,9 +1,3 @@
-//import * as d3Select from 'd3-selection'
-
-
-
-//console.log(d3.selection.on)
-
 //Bar plot variables
 
 var category_select = d3.selectAll("#top10").on('change',optionChanged)
@@ -24,8 +18,11 @@ const colors ={
   'Disney+': "Green"
 }
 
+//Otts 
+
 const otts = ["Netflix","Hulu","Prime Video","Disney+"];
 
+// ratings
 var IMDb_ratings = []
 var Rotten_Tomatoes = []
 
@@ -38,10 +35,10 @@ var svgWidth = 500;
 
 // margins
 var margin = {
-top: 50,
-right: 80,
+top: 100,
+right: 94,
 bottom: 55,
-left: 170
+left: 160
 };
 
 // chart area minus margins
@@ -49,11 +46,6 @@ var chartHeight = svgHeight - margin.top - margin.bottom;
 var chartWidth = svgWidth - margin.left - margin.right;
 
 
-
-//var netflix = []
-//var hulu = []
-//var disney = []
-//var prime_video = []
 
 function page_load()
 {
@@ -68,11 +60,6 @@ page_load()
 function scatter_plot()
 {
 
-  //console.log(d3.selectAll("svg").attr("id","svg-scatter1"))
-
-  //var svgarea = d3.select("body").select("svg").attr("id","svg-scatter1");
-
-  //if (svgarea.empty())
   {
     var svg = d3.select("body").select("#svg-area1").append("svg").attr("id","svg-scatter1")
     //.append("h2").text("Hi")
@@ -88,11 +75,11 @@ function scatter_plot()
   .attr("height", 500)
   .attr("width", 500);
 
-  //console.log(d3.selectAll("svg").attr("id","svg-scatter1"))
+
 
 d3.csv("https://raw.githubusercontent.com/ankithacherian/Lab4/main/ott_comparison.csv").then(function(d){  
   
-  d.forEach(function(data)
+  d.forEach(function(data) // looping through the data
     {
 
        data.IMDb = +data.IMDb
@@ -108,7 +95,7 @@ d3.csv("https://raw.githubusercontent.com/ankithacherian/Lab4/main/ott_compariso
   for (var i=0;i<d.length;i++)
   {
       
-        if (d[i]['IMDb'] == '')
+        if (d[i]['IMDb'] == '') // replacing empty strings to 0
         {
             d[i]['IMDb'] = 0.0
         }
@@ -118,7 +105,7 @@ d3.csv("https://raw.githubusercontent.com/ankithacherian/Lab4/main/ott_compariso
             d[i]['Rotten Tomatoes'] = 0
         }
 
-        IMDb_ratings.push(d[i]['IMDb'])
+        IMDb_ratings.push(d[i]['IMDb'])  // taking the arrays for x and y scale
         Rotten_Tomatoes.push(d[i]['Rotten Tomatoes'])
 
   }
@@ -167,12 +154,17 @@ chartGroup.append("g")
  .attr("class", "axisText")
  .text("IMDb Ratings");
  
+ // A color scale: one color for each group
+ var myColor = d3.scaleOrdinal()
+ .domain(Object.keys(colors))  // otts
+ .range(Object.values(colors));  // colors
+
 
  // create circles for scatter plot
 //var tooltip = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
 
 
- for (var i=0;i<d.length;i++)
+ for (var i=0;i<d.length;i++)  // We need d.length * otts.length points on scatter plot to have all 4 columns data to be plotted
  {
    //console.log(d[['IMDb']])
      for (var k = 0; k<otts.length ; k++)
@@ -198,7 +190,62 @@ chartGroup.append("g")
       }
   }
 
-  //-------------------trial------------------------
+  // creating legends on the top right
+
+  /*
+  var legend = svg.selectAll(".legend")
+  .data(myColor.domain().slice())
+  .enter().append("g")
+  .attr("class","legend")
+  .attr("transform",function(d,i) {
+    return "translate(0," + i * 20 + ")";
+  });
+
+legend.append("circle")
+  //.attr("cx",495)
+  //.attr("cy",9)
+  .attr("cx",475)
+  .attr("cy",9)
+  .attr("r",4)
+  .style("fill",myColor);
+
+legend.append("text")
+  //.attr("x",490)
+  //.attr("y",18)
+  .attr("x",490)
+  .attr("y",18)
+  //.attr("dy",".35em")
+  .style("text-anchor","end")
+  .text(function (d) {return d}) */
+
+
+      /// legend horizontal top
+
+      var legenddddd = svg.selectAll(".legend")
+      .data(myColor.domain().slice())
+      .enter().append("g")
+      .attr("class","legend")
+      .attr('transform', (d,i) => `translate(${i * 120},${chartHeight-300})`);
+
+
+      legenddddd.append('circle')
+      .style("fill",myColor)
+      .attr('cx', 5)
+      .attr('cy', 4)
+      .attr('r',4.5)
+      //.attr("dy","5em")
+
+    
+      legenddddd.append('text')
+      .style('font-family', 'Georgia')
+      .style('font-size', '13px')
+      .attr('x', 17.5)
+      .attr('y', 8.5)
+      //.attr("dx",".0.05em")
+      .text(function (d) {return d})
+      
+
+  //------------------- Brushing code start ------------------------
 //var c = 0
 function brushed()
 {
@@ -329,10 +376,10 @@ var brush = d3.brush()
            .on("brush",brushed) // Calling a function on brush change
            .on("end", displayTable); 
 
-d3.selectAll("#svg-area2").append("g").call(brush) // Calling a function on brush change
+//d3.selectAll("#svg-area2").append("g").call(brush) // Calling a function on brush change
 
 
-// -------------------trial-------------------------
+// ------------------- brushing code end-------------------------
 
   
 })
@@ -347,9 +394,6 @@ function Bar_Chart(categories,category_Counts,category_select)
   {
       svgarea.remove();
   }
-//d3.selectAll('svg').attr("id","svg-bar").remove()
-
-//d3.select('svg').attr("id","svg-bar").remove()
 
 // create svg container
 var svg = d3.select("#svg-area").append("svg")
@@ -357,13 +401,12 @@ var svg = d3.select("#svg-area").append("svg")
 .attr("width", svgWidth)
 .attr("id","svg-bar");
 
-//d3.selectAll('rect').remove()
 
 // Adding X - Axis label text
 
 svg.append('text')
 .attr('x',chartWidth + 100)
-.attr('y',chartHeight + 100)
+.attr('y',chartHeight + 145)
 .attr('text-anchor','middle')
 .text(category_select)
 
@@ -386,7 +429,6 @@ var yScale = d3.scaleBand()
 .range([chartHeight,0])
 .padding(0.2);
 
-
 // create axes
 var yAxis = d3.axisLeft(yScale);
 var xAxis = d3.axisBottom(xScale)
@@ -407,33 +449,70 @@ chartGroup.selectAll('rect')
    .data(category_Counts)
    .enter()
    .append('rect')
+   .attr("id",(d, i) => i)
    .attr('y', (d, i) => yScale(categories[i]))
    .attr('height',yScale.bandwidth())
    .attr('width', (d,i) => xScale(category_Counts[i]))
+   .attr("fill", "firebrick");  //rgb(178,34,34)
+   
 
 
-   // Adding labels on bars
+// Adding labels on bars on mouse over
 
-chartGroup.append("g")
-  .attr("font-size",11)
-  .selectAll('text')
-  .data(category_Counts)
-  .join("text")
-  .attr('y',(d, i) => yScale(categories[i]) + yScale.bandwidth()/2) 
-  .attr('x',(d,i) => xScale(category_Counts[i])+5)
-  .text((d, i) => category_Counts[i])
-  /*.transition()
-  .ease(d3.easeLinear)
-  .duration(3000)
-  .delay(function (d,i){
-    return i
-  }) */
+// Create the event listeners with transitions
+chartGroup.selectAll('rect').on("mouseover", function(d,i) {
 
+  //console.log(i)
+  var id = d3.select(this).attr("id")
+
+  //console.log(id)
+  //console.log(categories[id])
+  
+  for (key in category_occurences)
+{
+  if (category_occurences[key] == i && key == categories[id]) // key = categories[id] is to check for duplicate counts for ex action & biopic
+  {
+
+
+    d3.select(this)
+    //.transition()
+    //.duration(500)
+    .attr("fill", "black")
+
+    .attr("stroke-width","0.35ch")
+    .attr("stroke","firebrick")
+    .attr("cursor","pointer")
+
+
+     chartGroup
+    .append("g")
+    .attr("font-size",11)
+    .append("text")
+    .attr("id","bar-labels")
+    .attr("x",function(){
+        return (xScale(i)+5); // i is count here
+      })
+    .attr("y",function(){
+       return yScale(key) + yScale.bandwidth()/2 // key is category
+      })
+    .text(i + " in " + key) 
+    
+  }
+}
+  
+})   
+
+    .on("mouseout", function() {
+      d3.select(this)
+            .attr("fill", "firebrick");  //rgb(178,34,34)
+            d3.selectAll("#bar-labels").remove()
+           
+    });
 
 }
 
 
-function create_category_counts(d,category_select)
+function create_category_counts(d,category_select)  //// preparing counts for the selected categories with the data
 {
 
 
@@ -442,10 +521,10 @@ function create_category_counts(d,category_select)
 
     if (d[i][category_select] == '')
     {
-      d[i][category_select] = category_select + " " + "Unknown"
+      d[i][category_select] = category_select + " " + "Unknown" // Adding unknown for empty areas in categories
     }
 
-    if (category_occurences[d[i][category_select]])
+    if (category_occurences[d[i][category_select]])  // Preparing category : counts data in category_occurences
     {
       category_occurences[d[i][category_select]] += 1
     }
@@ -462,12 +541,12 @@ function create_category_counts(d,category_select)
 
     //console.log(key + " - " + value)
 
-    category_Counts.push(value)
+    category_Counts.push(value) // adding category counts in the array
   }
 
-  category_Counts.sort(function(a,b){return b-a})
+  category_Counts.sort(function(a,b){return b-a})  // descending order
 
-  category_Counts = category_Counts.slice(0,10)  
+  category_Counts = category_Counts.slice(0,10)  // taking top 10
 
   //console.log(category_Counts)
 
@@ -487,7 +566,7 @@ function create_category_counts(d,category_select)
 
       if (categories.length < 10 && categories.includes(key) == false)
       {
-        categories.push(key)
+        categories.push(key)  // adding categories in the array
       }
 
     }
@@ -512,7 +591,7 @@ function top10_viewers(category_select)
 
       {
 
-         create_category_counts(d,category_select)
+         create_category_counts(d,category_select) // preparing counts for the selected categories
 
       })
   }
@@ -521,28 +600,24 @@ function top10_viewers(category_select)
   {
     d3.csv("https://raw.githubusercontent.com/ankithacherian/Lab4/main/netflix_titles.csv").then(function(d){
        
-      create_category_counts(d,category_select)
+      create_category_counts(d,category_select) // preparing counts for the selected categories
     })
   }
 
-categories = []
+categories = []  // Emptying the arrays for next category
 category_Counts = []
 category_occurences = []
 
 }
 
-//-----------------------------------------------------------------------------------------------
   
 function optionChanged ()
 {
  var category_select = d3.select("#top10").property("value")
  //console.log(category_select)
 
- //if (category_select == "Genre" || category_select == "Language")
- {
-   //console.log(category_select)
-   top10_viewers(category_select)
- }
+ top10_viewers(category_select)
+ 
 }
 
 
