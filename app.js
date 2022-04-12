@@ -221,14 +221,14 @@ legend.append("text")
 
       /// legend horizontal top
 
-      var legenddddd = svg.selectAll(".legend")
+      var legend = svg.selectAll(".legend")
       .data(myColor.domain().slice())
       .enter().append("g")
       .attr("class","legend")
       .attr('transform', (d,i) => `translate(${i * 120},${chartHeight-300})`);
 
 
-      legenddddd.append('circle')
+      legend.append('circle')
       .style("fill",myColor)
       .attr('cx', 5)
       .attr('cy', 4)
@@ -236,7 +236,7 @@ legend.append("text")
       //.attr("dy","5em")
 
     
-      legenddddd.append('text')
+      legend.append('text')
       .style('font-family', 'Georgia')
       .style('font-size', '13px')
       .attr('x', 17.5)

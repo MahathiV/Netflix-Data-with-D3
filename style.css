@@ -1,14 +1,14 @@
-rect {            /* For Bar Chart */
+/*rect {             For Bar Chart 
     fill: firebrick;
-}
+} */
 
-rect:hover /* For Bar Chart */
+/*rect:hover  For Bar Chart 
 {
     fill:black;
     stroke: firebrick;
     stroke-width: 0.35ch;
 	cursor:pointer;
-}
+} */
 
 text{
     font-size: 1.3em;
